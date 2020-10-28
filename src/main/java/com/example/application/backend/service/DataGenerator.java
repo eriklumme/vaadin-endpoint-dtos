@@ -20,7 +20,7 @@ public class DataGenerator {
     private static final int NUM_COMPANIES = 30;
     private static final int NUM_EMPLOYEES_MIN = 10;
     private static final int NUM_EMPLOYEES_MAX = 200;
-    private static final int EMPLOYEE_REPORT_SIZE_KB = 2048;
+    private static final int EMPLOYEE_REPORT_SIZE_CHARS = 4096;
 
     private final Random random = new Random();
     private final Faker faker;
@@ -40,7 +40,7 @@ public class DataGenerator {
     }
 
     private byte[] generateEmployeeReport() {
-        return faker.lorem().characters(EMPLOYEE_REPORT_SIZE_KB).getBytes(StandardCharsets.UTF_8);
+        return faker.lorem().characters(EMPLOYEE_REPORT_SIZE_CHARS).getBytes(StandardCharsets.UTF_8);
     }
 
     private void generateCompanies(Iterable<Industry> industries, CompanyService companyService) {

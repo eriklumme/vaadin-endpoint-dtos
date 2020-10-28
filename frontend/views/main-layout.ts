@@ -8,8 +8,7 @@ export class MainLayout extends LitElement {
         return html`
 <h1>The App That Shows Some Information</h1>
 <vaadin-horizontal-layout theme="padding spacing" id="nav">
-    <a href="/">One</a>
-    <a href="/">Two</a>
+    <a href="/">Home</a>
 </vaadin-horizontal-layout>
 <slot></slot>
         `;
