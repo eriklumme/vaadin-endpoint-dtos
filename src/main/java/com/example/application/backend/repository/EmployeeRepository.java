@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EmployeeRepository extends CrudRepository<Employee, Integer> {
 
-    Iterable<Employee> findEmployeesByCompanyId(int companyId);
+    Iterable<Employee> findEmployeesByCompanyIdOrderByFirstNameAscLastNameAsc(int companyId);
 }

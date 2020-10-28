@@ -26,4 +26,10 @@ public class VaadinEndpoint {
     public Iterable<Employee> getEmployees(int companyId) {
         return employeeService.getEmployeesForCompany(companyId);
     }
+
+    public void saveCompany(Company company) {
+        // Must do this to avoid clearing out the employees
+        company.getEmployees().forEach(employee -> employee.setCompany(company));
+        companyService.saveCompany(company);
+    }
 }

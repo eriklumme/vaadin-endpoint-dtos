@@ -14,6 +14,6 @@ public class EmployeeService {
     }
 
     public Iterable<Employee> getEmployeesForCompany(int companyId) {
-        return employeeRepository.findEmployeesByCompanyId(companyId);
+        return employeeRepository.findEmployeesByCompanyIdOrderByFirstNameAscLastNameAsc(companyId);
     }
 }

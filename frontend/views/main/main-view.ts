@@ -6,8 +6,11 @@ import '@vaadin/vaadin-text-field'
 import '@vaadin/vaadin-text-field/vaadin-text-area';
 import '@vaadin/vaadin-split-layout';
 import '@vaadin/vaadin-grid';
+import '@vaadin/vaadin-button';
+import '@vaadin/vaadin-notification';
 
 import * as VaadinEndpoint from '../../generated/VaadinEndpoint';
+import {render} from "lit-html";
 
 @customElement('main-view')
 export class MainView extends LitElement {
@@ -22,7 +25,8 @@ export class MainView extends LitElement {
         <h2>Company information</h2>
         <vaadin-text-field label="Name" readonly .value=${this.company?.name}></vaadin-text-field>
         <vaadin-text-field label="Industry" readonly .value=${this.company?.industry?.name}></vaadin-text-field>
-        <vaadin-text-area label="Notes" .value=${this.company?.notes}></vaadin-text-area>
+        <vaadin-text-area label="Notes" .value=${this.company?.notes} id="notesArea"></vaadin-text-area>
+        <vaadin-button theme="primary" style="margin-top: var(--lumo-space-m)" @click=${this.save} .disabled=${!this.company}>Save</vaadin-button>
     </vaadin-form-layout>
     
     <vaadin-vertical-layout theme="padding spacing">
@@ -32,6 +36,8 @@ export class MainView extends LitElement {
             <vaadin-grid-column path="lastName"></vaadin-grid-column>
         </vaadin-grid>
     </vaadin-vertical-layout>
+    
+    <vaadin-notification id="notification" theme="success"></vaadin-notification>
 </vaadin-split-layout>
         `;
     }
@@ -42,11 +48,21 @@ export class MainView extends LitElement {
     @query('#employeeGrid')
     private employeeGrid: any;
 
+    @query('#notification')
+    private notification: any;
+
+    @query('#notesArea')
+    private notesArea: any;
+
     @property()
     private company: any;
 
     protected firstUpdated() {
-        VaadinEndpoint.getCompanies().then(companies => this.companySelector.items=companies);
+        this.updateCompanies();
+    }
+
+    private async updateCompanies() {
+        return VaadinEndpoint.getCompanies().then(companies => this.companySelector.items=companies);
     }
 
     private companySelected() {
@@ -55,6 +71,17 @@ export class MainView extends LitElement {
         if (this.company) {
             VaadinEndpoint.getEmployees(this.company.id).then(employees => this.employeeGrid.items = employees);
         }
+    }
+
+    private save() {
+        this.company.notes = this.notesArea.value;
+        VaadinEndpoint.saveCompany(this.company).then(async (_: any) => {
+            await this.updateCompanies();
+            this.notification.renderer = (rootElement: any, _: any) => {
+                render(html`Company saved`, rootElement);
+            };
+            this.notification.open();
+        });
     }
 
     static get styles() {

@@ -14,7 +14,7 @@ public class CompanyService {
     }
 
     public Iterable<Company> getCompanies() {
-        return companyRepository.findAll();
+        return companyRepository.findByOrderByName();
     }
 
     public Company saveCompany(Company company) {
