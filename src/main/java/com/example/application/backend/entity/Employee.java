@@ -12,6 +12,7 @@ public class Employee extends AbstractEntity {
 
     private String lastName;
 
+    @JsonIgnore
     private String ssn;
 
     @ManyToOne

@@ -24,7 +24,7 @@ export class MainView extends LitElement {
     <vaadin-form-layout style="max-width: 400px; padding-right: var(--lumo-space-m);">
         <h2>Company information</h2>
         <vaadin-text-field label="Name" readonly .value=${this.company?.name}></vaadin-text-field>
-        <vaadin-text-field label="Industry" readonly .value=${this.company?.industry?.name}></vaadin-text-field>
+        <vaadin-text-field label="Industry" readonly .value=${this.industryName}></vaadin-text-field>
         <vaadin-text-area label="Notes" .value=${this.company?.notes} id="notesArea"></vaadin-text-area>
         <vaadin-button theme="primary" style="margin-top: var(--lumo-space-m)" @click=${this.save} .disabled=${!this.company}>Save</vaadin-button>
     </vaadin-form-layout>
@@ -57,6 +57,9 @@ export class MainView extends LitElement {
     @property()
     private company: any;
 
+    @property()
+    private industryName: string | any;
+
     protected firstUpdated() {
         this.updateCompanies();
     }
@@ -70,6 +73,7 @@ export class MainView extends LitElement {
 
         if (this.company) {
             VaadinEndpoint.getEmployees(this.company.id).then(employees => this.employeeGrid.items = employees);
+            VaadinEndpoint.getIndustryRealName(this.company.industry.id).then(name => this.industryName = name);
         }
     }
 

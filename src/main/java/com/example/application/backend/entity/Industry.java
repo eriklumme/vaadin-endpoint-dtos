@@ -1,5 +1,7 @@
 package com.example.application.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 
@@ -16,6 +18,7 @@ public class Industry extends AbstractEntity {
     private String name;
 
     @Lob
+    @JsonIgnore
     private byte[] employmentReport;
 
     public Industry() {
