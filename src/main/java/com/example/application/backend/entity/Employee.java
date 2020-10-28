@@ -1,7 +1,5 @@
 package com.example.application.backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
@@ -12,11 +10,9 @@ public class Employee extends AbstractEntity {
 
     private String lastName;
 
-    @JsonIgnore
     private String ssn;
 
     @ManyToOne
-    @JsonIgnore
     private Company company;
 
     public Employee() {
