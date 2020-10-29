@@ -13,16 +13,16 @@ import java.util.Optional;
 public class CompanyService {
 
     private final CompanyRepository companyRepository;
-    private final IndustryNameService industryNameService;
+    private final DTOMapper dtoMapper;
 
-    public CompanyService(CompanyRepository companyRepository, IndustryNameService industryNameService) {
+    public CompanyService(CompanyRepository companyRepository, DTOMapper dtoMapper) {
         this.companyRepository = companyRepository;
-        this.industryNameService = industryNameService;
+        this.dtoMapper = dtoMapper;
     }
 
     public List<CompanyDTO> getCompanies() {
         List<CompanyDTO> companyDTOS = new ArrayList<>();
-        companyRepository.findByOrderByName().forEach(company -> companyDTOS.add(toDto(company)));
+        companyRepository.findByOrderByName().forEach(company -> companyDTOS.add(dtoMapper.map(company)));
         return companyDTOS;
     }
 
@@ -36,14 +36,5 @@ public class CompanyService {
 
     public Iterable<Company> saveCompanies(Iterable<Company> companies) {
         return companyRepository.saveAll(companies);
-    }
-
-    private CompanyDTO toDto(Company company) {
-        String industryName = industryNameService.getProperNameForIndustry(company.getIndustry().getName());
-        return new CompanyDTO(
-                company.getId(),
-                company.getName(),
-                industryName,
-                company.getNotes());
     }
 }

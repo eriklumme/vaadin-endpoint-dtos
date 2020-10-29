@@ -2,17 +2,11 @@ package com.example.application.backend.dto;
 
 public class CompanyDTO {
 
-    private final Integer id;
-    private final String name;
-    private final String industryName;
-    private final String notes;
+    private Integer id;
+    private String name;
 
-    public CompanyDTO(Integer id, String name, String industryName, String notes) {
-        this.id = id;
-        this.name = name;
-        this.industryName = industryName;
-        this.notes = notes;
-    }
+    private String industryName;
+    private String notes;
 
     public Integer getId() {
         return id;
@@ -26,6 +20,9 @@ public class CompanyDTO {
         return industryName;
     }
 
+    public void setIndustryName(String industryName) {
+        this.industryName = industryName;
+    }
     public String getNotes() {
         return notes;
     }
