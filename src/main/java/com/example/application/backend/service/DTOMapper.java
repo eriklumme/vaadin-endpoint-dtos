@@ -12,10 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Member;
-import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,26 +46,29 @@ public class DTOMapper {
     }
 
     private void printValidations(PropertyMapping propertyMapping) {
-        List<? extends PropertyInfo> propertyInfos = propertyMapping.getSourceProperties();
-        for (PropertyInfo propertyInfo: propertyInfos) {
-
-            Field field = findFieldInClassOrSuper(propertyInfo.getInitialType(), propertyInfo.getName());
-            printValidations(propertyInfo.getInitialType(), "field", propertyInfo.getName(), field.getAnnotations());
-
-            Member member = propertyInfo.getMember();
-            if (member instanceof Method) {
-                Method method = (Method) member;
-                printValidations(propertyInfo.getInitialType(), "method", method.getName(), method.getAnnotations());
-            }
+        if (propertyMapping.getSourceProperties().size() > 1 || propertyMapping.getDestinationProperties().size() > 1) {
+            // I believe this means that multiple properties were mapped to one property, or vice versa, in which case
+            // validations don't make much sense
+            return;
         }
-    }
+        PropertyInfo sourceProperty = propertyMapping.getLastSourceProperty();
+        PropertyInfo destinationProperty = propertyMapping.getLastDestinationProperty();
 
-    private void printValidations(Class<?> sourceType, String type, String name, Annotation[] annotations) {
-        String annotationString = annotations.length == 0 ? "<none>" :
-                Arrays.stream(annotations)
+        Class<?> sourceClass = sourceProperty.getInitialType();
+        Class<?> destinationClass = destinationProperty.getInitialType();
+
+        Field sourceField = findFieldInClassOrSuper(sourceClass, sourceProperty.getName());
+        Annotation[] sourceAnnotations = sourceField.getAnnotations();
+        String annotationString = sourceAnnotations.length == 0 ?
+                "no annotations" :
+                "annotations " + Arrays.stream(sourceAnnotations)
                         .map(annotation -> annotation.annotationType().getName())
                         .collect(Collectors.joining(", "));
-        System.out.printf("%s %s %s has annotations %s%n", sourceType.getSimpleName(), type, name, annotationString);
+
+        System.out.printf("%s.%s was mapped from %s.%s which had %s%n",
+                destinationClass.getSimpleName(), destinationProperty.getName(),
+                sourceClass.getSimpleName(), sourceProperty.getName(),
+                annotationString);
     }
 
     private Field findFieldInClassOrSuper(Class<?> type, String fieldName) {
