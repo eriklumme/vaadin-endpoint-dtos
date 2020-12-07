@@ -20,10 +20,8 @@ public class CompanyService {
         this.dtoMapper = dtoMapper;
     }
 
-    public List<CompanyDTO> getCompanies() {
-        List<CompanyDTO> companyDTOS = new ArrayList<>();
-        companyRepository.findByOrderByName().forEach(company -> companyDTOS.add(dtoMapper.map(company)));
-        return companyDTOS;
+    public List<Company> getCompanies() {
+        return companyRepository.findByOrderByName();
     }
 
     public void saveCompany(CompanyDTO companyDTO) {
