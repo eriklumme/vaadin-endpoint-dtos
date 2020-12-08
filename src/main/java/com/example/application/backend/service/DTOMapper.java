@@ -46,11 +46,6 @@ public class DTOMapper {
     }
 
     private void printValidations(PropertyMapping propertyMapping) {
-        if (propertyMapping.getSourceProperties().size() > 1 || propertyMapping.getDestinationProperties().size() > 1) {
-            // I believe this means that multiple properties were mapped to one property, or vice versa, in which case
-            // validations don't make much sense
-            return;
-        }
         PropertyInfo sourceProperty = propertyMapping.getLastSourceProperty();
         PropertyInfo destinationProperty = propertyMapping.getLastDestinationProperty();
 

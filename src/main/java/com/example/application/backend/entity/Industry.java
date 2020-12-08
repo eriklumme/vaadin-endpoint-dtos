@@ -2,6 +2,7 @@ package com.example.application.backend.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Lob;
+import javax.validation.constraints.Size;
 
 /**
  * Represents an industry that a company may belong to,
@@ -13,6 +14,7 @@ import javax.persistence.Lob;
 @Entity
 public class Industry extends AbstractEntity {
 
+    @Size(max = 100)
     private String name;
 
     @Lob
